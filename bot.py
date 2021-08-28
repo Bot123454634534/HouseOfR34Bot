@@ -87,7 +87,7 @@ async def shuffleUser(ctx, target: User):
             await target.move_to(channel1)
             await target.move_to(channel2)
             i = i + 1 
-            await ctx.send(f'member shuffled: {target.name}')
+        await ctx.send(f'member shuffled: {target.name}')
 
 @shuffleUser.error
 async def shuffle_user_error(ctx, exc):
