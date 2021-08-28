@@ -1,13 +1,11 @@
-import discord
 import os
 import random
 from discord.errors import Forbidden
 from discord.ext import commands
-from discord.ext.commands.converter import Greedy
 from discord.ext.commands.core import has_permissions
-from discord.guild import Guild
 from discord.user import User
 from discord_slash import SlashCommand
+from discord_slash.context import SlashContext
 from discord_slash.utils.manage_commands import create_choice, create_option
 from dotenv import load_dotenv
 
@@ -36,7 +34,7 @@ async def unload(ctx, extension):
 
 @slash.slash(name='ror', description="Gernerates a Random ROR2 character to play with random artifacts", guild_ids= guild_ids)
 @client.command(name="ror")
-async def ror(ctx):
+async def ror(ctx: SlashContext):
     characters = ["Commando", "Huntress", 'MUL-T', 'Engineer', 'Mercenary', 'REX', 'Loader', 'Acrid', 'Artificer', 'Capitan']
     artifacts = ['Chaos', 'Command', 'Death', 'Dissonance', 'Enigma' , 'Evolution', 'Frailty', 'Glass', 'Honor', 'Kin', 'Metamorphosis', 'Sacrifice', 'Soul', 'Spite', 'Swarms', 'Vengeance']
     artifact = []
@@ -63,11 +61,11 @@ async def psr(ctx, choice: str):
     player = choice.lower()
     bot = random.choice(options)
     if player == bot:
-        await ctx.send(f'Bot chose:{bot}\nDraw!')
+        await ctx.send(f'You chose:{player}\nBot chose:{bot}\nDraw!')
     elif (player == 'paper' and bot == 'rock') or (player == 'sissors' and bot == 'paper') or (player == 'rock' and bot == 'sissors'):
-        await ctx.send(f'Bot chose:{bot}\nYou Win!')
+        await ctx.send(f'You chose:{player}\nBot chose:{bot}\nYou Win!')
     else:
-        await ctx.send(f'Bot chose:{bot}\nYou Lose!')
+        await ctx.send(f'You chose:{player}\nBot chose:{bot}\nYou Lose!')
 
 
 # Admin commands
@@ -93,5 +91,10 @@ async def shuffleUser(ctx, target: User):
 async def shuffle_user_error(ctx, exc):
     if isinstance(exc, Forbidden):
         await ctx.send("You don't have the correct permissons to use this command") 
+
+for filename in os.listdir('./cogs'):
+    if filename.endswith('.py'):
+        client.load_extension(f'cogs.{filename[:-3]}')
+
 
 client.run(os.getenv('TOKEN'))
