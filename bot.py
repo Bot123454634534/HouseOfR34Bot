@@ -7,13 +7,14 @@ from discord.ext.commands.converter import Greedy
 from discord.ext.commands.core import has_permissions
 from discord.member import Member
 from discord_slash import SlashCommand
+from discord_slash.utils.manage_commands import create_option
 from dotenv import load_dotenv
 
 #TODO: need to get cogs working properly
 #TODO: slash commands
 
 client = commands.Bot(command_prefix = '.')
-# slash = SlashCommand(client, sync_commands=True)
+slash = SlashCommand(client)
 
 @client.event
 async def on_ready():
@@ -27,6 +28,7 @@ async def load(ctx, extension):
 async def unload(ctx, extension):
     client.unload_extension(f'cogs.{extension}')
 
+@slash.slash(name='ror', description="Gernerates a Random ROR2 character to play with random artifacts")
 @client.command(name="ror")
 async def ror(ctx):
     characters = ["Commando", "Huntress", 'MUL-T', 'Engineer', 'Mercenary', 'REX', 'Loader', 'Acrid', 'Artificer', 'Capitan']
@@ -39,10 +41,12 @@ async def ror(ctx):
     
     await ctx.send(f'Survivor: {random.choice(characters)}\nArtifact(s): {artifact}')
 
+# @slash.slash(name='ShuffleUser', description="shuffle user between two channels", 
+# options=[create_option(name='targets', description='user(s) to shuffle', option_type=6, required=True)])
 @client.command(aliases=["su"])
 @has_permissions(administrator=True)
-async def shuffleUser(self, ctx, targets: Greedy[Member]):
-    channel1 = self.client.get_channel(803786402947923998)
+async def shuffleUser(ctx, targets: Greedy[Member]):
+    channel1 = client.get_channel(803786402947923998)
  
     if not len(targets):
         await ctx.send("no members selected")
