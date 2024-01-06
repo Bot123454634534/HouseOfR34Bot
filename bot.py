@@ -1,4 +1,4 @@
-import os
+import os MTAzOTU2MDIyMDA0MjU5NjQ0Mg.GEoYaG.aV8qANYVFUZxxCQep-G1t-UoEhqMo9XRK3cxa8
 import random
 from discord.errors import Forbidden
 from discord.ext import commands
@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 
 #TODO: need to get cogs working properly
 
-client = commands.Bot(command_prefix = '.')
+client = commands.Bot(command_prefix = 'pls')
 slash = SlashCommand(client, sync_commands=True)
 
 load_dotenv()
